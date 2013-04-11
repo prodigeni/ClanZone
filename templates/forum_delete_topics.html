@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="description" content="Clanpage using webSPELL 4 CMS" />
+	<meta name="author" content="webspell.org" />
+	<meta name="keywords" content="webspell, webspell4, clan, cms" />
+	<meta name="copyright" content="Copyright &copy; 2005 - 2009 by webspell.org" />
+	<meta name="generator" content="webSPELL" />
+	<title>$pagetitle</title>
+	<link href="_stylesheet.css" rel="stylesheet" type="text/css" />
+  <script src="js/bbcode.js" language="jscript" type="text/javascript"></script>
+</head>
+
+<body bgcolor="$pagebg" style="align: center;">
+<br /><br />
+<form method="post" action="forum.php?board=$board">
+<table width="50%" style="margin-left: 400px" cellpadding="2" cellspacing="0" border="0" bgcolor="$border">
+  <tr bgcolor="$bghead">
+    <td class="title" width="100" colspan="2">%fao_really_delete%</td>
+  </tr>
+  <tr><td bgcolor="$pagebg" colspan="2"></td></tr>
+  <tr>
+	<td bgcolor="$bg1" align="right" width="250px;">%fao_topic_amount%:</td>
+	<td bgcolor="$bg1"><strong>$anz</strong></td>
+  </tr>
+  <tr>
+    <td bgcolor="$bg1" valign="top" align="right">%fao_selected_topics%:</td>
+	<td bgcolor="$bg1"><select id="topics" name="topics[]" multiple="multiple" size="5" >$topics</select></td> 
+  </tr>
+  <tr>
+	<td align="center" bgcolor="$bg1" colspan="2">
+		<br />
+	    <input type="hidden" name="admaction" value="deletetopics" />
+		<input type="hidden" name="board" value="$board" />
+		<input type="button" value="%fao_back%" onclick="javascript:history.back()" class="button1"/>&nbsp;
+		<input type="submit" name="deletetopics" value="%fao_delete_topics%" class="button1"/>
+	</td>
+  </tr>
+</table>
+</form>
+</body>
+</html>
+	

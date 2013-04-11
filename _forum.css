@@ -1,0 +1,10 @@
+#middle_column {
+	margin: 5px;
+	width: 888px;
+}
+#navigation {
+	height: 105px;
+}
+#middle_column .block h1 {
+	background-image: url("images/forum_header.png");
+}
