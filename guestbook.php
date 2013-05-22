@@ -24,16 +24,14 @@
 #                                                                        #
 ##########################################################################
 */
-//Start recaptcha mod include
-require_once('recaptchalib.php');
-//End recaptcha mod include
+
 if(isset($_GET['action'])) $action = $_GET['action'];
 else $action='';
+
 if(isset($_POST['save'])) {
 	include("_mysql.php");
 	include("_settings.php");
 	include("_functions.php");
-	include("_recaptcha.php");
 	$_language->read_module('guestbook');
 
 	$date = time();
@@ -52,14 +50,12 @@ if(isset($_POST['save'])) {
 		$email = $_POST['gbemail'];
 		$url = $_POST['gburl'];
 		$icq = $_POST['icq'];
-		//Start recaptcha Mod
-		$resp = recaptcha_check_answer ($privatekey,
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
-		if($resp->is_valid) $run=1;
-		//End recaptcha Mod
+		$CAPCLASS = new Captcha;
+		if($CAPCLASS->check_captcha($_POST['captcha'], $_POST['captcha_hash'])){
+			$run=1;
+		}
 	}
+
 	if($run) {
 		if(mb_strlen($_POST['message'])){
 			safe_query("INSERT INTO
@@ -78,7 +74,7 @@ if(isset($_POST['save'])) {
 			            	'".$email."', 
 			            	'".$url."', 
 			            	'".$icq."', 
-			            	'".$GLOBALS['ip']."', 
+			            	'".$ip."', 
 			            	'".$_POST['message']."'
 			            );");
 	
@@ -94,7 +90,7 @@ if(isset($_POST['save'])) {
 					sendmessage($id,mysql_real_escape_string($_language->module['pmsubject_newentry']),$message);
 				}
 			}
-			header("Location: index.php?site=guestbook");
+			header("Location: index.php?site=guestbook&action=add&thx");
 		}
 		else {
 			header("Location: index.php?site=guestbook&action=add&error=message");
@@ -104,6 +100,10 @@ if(isset($_POST['save'])) {
 		header("Location: index.php?site=guestbook&action=add&error=captcha");
 	}
 	
+}
+elseif(isset($_GET['thx'])) {
+	$_language->read_module('guestbook');
+	echo ($_language->module['thx']);
 }
 elseif(isset($_GET['delete'])) {
 	include("_mysql.php");
@@ -122,7 +122,7 @@ elseif(isset($_POST['savecomment'])) {
 	include("_mysql.php");
 	include("_settings.php");
 	include("_functions.php");
-	
+
 	$_language->read_module('guestbook');
 	if(!isfeedbackadmin($userID)) die($_language->module['no_access']);
 
@@ -135,7 +135,7 @@ elseif($action == 'comment' AND is_numeric($_GET['guestbookID'])) {
 	$_language->read_module('guestbook');
 	$_language->read_module('bbcode', true);
 	if(!isfeedbackadmin($userID)) die($_language->module['no_access']);
-	$ergebnis = safe_query("SELECT admincomment FROM ".PREFIX."guestbook WHERE gbID='".$_GET['guestbookID']."'");
+	$ergebnis = safe_query("SELECT admincomment FROM ".PREFIX."guestbook WHERE gbID='".$_GET['guestbookID']."' AND active='1'");
 	$bg1 = BG_1;
 	$ds = mysql_fetch_array($ergebnis);
 	$admincomment = getinput($ds['admincomment']);
@@ -150,12 +150,11 @@ elseif($action == 'add') {
 
 	$_language->read_module('guestbook');
 	$_language->read_module('bbcode', true);
-	include("_recaptcha.php");
 
 	$message='';
 	if(isset($_GET['messageID'])) {
 		if(is_numeric($_GET['messageID'])) {
-			$ds=mysql_fetch_array(safe_query("SELECT comment, name FROM `".PREFIX."guestbook` WHERE gbID='".$_GET['messageID']."'"));
+			$ds=mysql_fetch_array(safe_query("SELECT comment, name FROM `".PREFIX."guestbook` WHERE gbID='".$_GET['messageID']." AND active='1'"));
 			$message='[quote='.$ds['name'].']'.getinput($ds['comment']).'[/quote]';
 		}
 	}
@@ -174,9 +173,11 @@ elseif($action == 'add') {
 		echo $guestbook_loggedin;
 	}
 	else {
-		//Start recaptcha Mod
-		$recaptcha = recaptcha_get_html($publickey, $error);
-		//End recaptcha Mod
+		$CAPCLASS = new Captcha;
+		$captcha = $CAPCLASS->create_captcha();
+		$hash = $CAPCLASS->get_hash();
+		$CAPCLASS->clear_oldcaptcha();
+
 		eval ("\$guestbook_notloggedin = \"".gettemplate("guestbook_notloggedin")."\";");
 		echo $guestbook_notloggedin;
 	}
@@ -187,7 +188,7 @@ else {
 	eval ("\$title_guestbook = \"".gettemplate("title_guestbook")."\";");
 	echo $title_guestbook;
 
-	$gesamt = mysql_num_rows(safe_query("SELECT gbID FROM ".PREFIX."guestbook"));
+	$gesamt = mysql_num_rows(safe_query("SELECT gbID FROM ".PREFIX."guestbook where active='1'"));
 
 	if(isset($_GET['page'])) $page = (int)$_GET['page'];
 	else $page = 1;
@@ -201,13 +202,13 @@ else {
 	else $page_link='';
 
 	if ($page == "1") {
-		$ergebnis = safe_query("SELECT * FROM ".PREFIX."guestbook ORDER BY date $type LIMIT 0,$maxguestbook");
+		$ergebnis = safe_query("SELECT * FROM ".PREFIX."guestbook where active='1' ORDER BY date $type LIMIT 0,$maxguestbook");
 		if($type=="DESC") $n=$gesamt;
 		else $n=1;
 	}
 	else {
 		$start=$page*$maxguestbook-$maxguestbook;
-		$ergebnis = safe_query("SELECT * FROM ".PREFIX."guestbook ORDER BY date $type LIMIT $start,$maxguestbook");
+		$ergebnis = safe_query("SELECT * FROM ".PREFIX."guestbook where active='1' ORDER BY date $type LIMIT $start,$maxguestbook");
 		if($type == "DESC") $n = $gesamt-($page-1)*$maxguestbook;
 		else $n = ($page-1)*$maxguestbook+1;
 	}

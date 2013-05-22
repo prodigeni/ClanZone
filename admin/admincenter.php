@@ -118,6 +118,11 @@ if(!isset($_SERVER['REQUEST_URI'])) {
       <li><a href="admincenter.php?site=faqcategories"><?php echo $_language->module['faq_categories']; ?></a></li>
       <li><a href="admincenter.php?site=linkcategorys"><?php echo $_language->module['link_categories']; ?></a></li>
     </ul>
+	<?php } if(ispageadmin($userID)) { ?>
+    		<h2>&not; <?php echo $_language->module['guestbook']; ?></h2>
+    		<ul>
+      		  <li><a href="admincenter.php?site=guestbook"><?php echo $_language->module['guestbook_check']; ?></a></li>
+    		</ul>
     <?php } if(ispageadmin($userID)) { ?>
     <h2>&not; <?php echo $_language->module['settings']; ?></h2>
     <ul>

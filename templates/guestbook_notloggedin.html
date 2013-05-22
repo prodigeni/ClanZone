@@ -1,4 +1,4 @@
-<!--hier kannst du die Farbe des Captchas anpassen, wähle eine folgender Themes:
+<!--hier kannst du die Farbe des Captchas anpassen, wï¿½hle eine folgender Themes:
 'red','white','blackglass','clean','custom' | weitere Infos zum anpassen des Styles bzw. auch individueller Styles findest du auf www.recaptcha.net-->
 <script>
 var RecaptchaOptions = {
@@ -38,47 +38,17 @@ function chkFormular() {
       <tr>
         <td colspan="4">
         <table border="0" cellspacing="0" cellpadding="2">
-          <tr>
-        	<td align="center" colspan="2"><font color="#CC0000"><b>$error</b></font></td>
+          <center><tr>
+        	<td align="center" ><font color="#CC0000"><b>&nbsp You must be logged in to post an entry.</br></b></font></td>
       	  </tr>
+		  <tr>
+        	<td align="center" >&nbsp <a href="index.php?site=register">Register</a> or <a href="index.php">Login</a></td>
+      	  </tr></center>
           <tr>
-            <td>%name%:</td>
-            <td><input id="gbname" name="gbname" type="text" size="40" /></td>
-          </tr>
-          <tr>
-            <td>%mail%:</td>
-            <td><input name="gbemail" type="text" size="40" /></td>
-          </tr>
-          <tr>
-            <td>%icq%:</td>
-            <td><input name="icq" type="text" size="40" /></td>
-          </tr>
-          <tr>
-            <td>%homepage%:</td>
-            <td><input name="gburl" type="text" value="http://" size="40" /></td>
-          </tr>
-          <tr>
-            <td colspan="2">%security_code%:</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>$recaptcha</td>
-          </tr>
         </table>
         </td>
       </tr>
-      <tr>
-        <td colspan="2">$addbbcode</td>
-      </tr>
-      <tr>
-        <td colspan="2"><b>%your_message%:</b><br />
-        <textarea id="gbmessage" name="message" rows="5" cols="35" style="width:99%;">$message</textarea></td>
-      </tr>
-      <tr>
-        <td><small><b>%options%:</b> &#8226; %html% &#8226; %bbcode% &#8226; %smilies%</small></td>
-        <td align="right"> <input name="save" type="submit" value="%submit%" class="button1"/></td>
-      </tr>
-    </table>
+   </table>
     </td>
   </tr>
 </table>
