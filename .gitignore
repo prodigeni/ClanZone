@@ -1,3 +1,11 @@
 /tmp/*.jpg
-/_mysql.php
 /.project
+/_mysql.php
+/_recaptcha.php
+/downloads/
+/images/avatars/
+/images/clanwar-screens/
+/images/gallery/
+/images/highlighted-pics/
+/images/links/
+/images/userpics/
