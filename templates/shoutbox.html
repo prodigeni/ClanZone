@@ -26,7 +26,6 @@ fetch('shoutbox_content.php', 'shoutbox', 'replace', 'time', $refresh);
 	<form name="shout" method="post" action="index.php?site=shoutbox_content&amp;action=save" onsubmit="return chkFormularShoutBox()">
 		<input type="text" id="shoutbox_name" name="name" size="24" maxlength="255" $name_settings /><br/>
 		<input type="text" id="shoutbox_message" name="message" size="24" maxlength="255" value="Message" onfocus="if (this.value=='Message') this.value=''"/><br/>
-		$captcha_form
 		<input type="submit" value="%shout%" onclick="if(chkFormularShoutBox())+document.shout.submit();"/> <a href="index.php?site=shoutbox_content&amp;action=showall">%all_messages%</a>
 	</form>
 </div>

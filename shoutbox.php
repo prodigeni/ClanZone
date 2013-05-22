@@ -30,19 +30,19 @@ if($userID) {
 	$captcha_form = '';
 }
 else {
-	$name_settings = 'value="Name" onfocus="this.value=\'\'"';
-	$CAPCLASS = new Captcha;
-	$captcha = $CAPCLASS->create_captcha();
-	$hash = $CAPCLASS->get_hash();
-	$CAPCLASS->clear_oldcaptcha();
-	$captcha_form = $captcha.' <input type="text" name="captcha" size="5" maxlength="5" /><input name="captcha_hash" type="hidden" value="'.$hash.'" /><br />';
+	$registered = '<i>only registered user can shout.</i>';
 }
 
 $_language->read_module('shoutbox');
 
 $refresh = $sbrefresh*1000;
 
+if($loggedin) {
 eval ("\$shoutbox = \"".gettemplate("shoutbox")."\";");
 echo $shoutbox;
+}
+else {
+echo 'Only registered user can shout.';
+}
 
 ?>
