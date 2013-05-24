@@ -77,7 +77,7 @@ if($action=="new") {
 			if($i==date("n", time())) $month.='<option value="'.$i.'" selected="selected">'.date("M", time()).'</option>';
 			else $month.='<option value="'.$i.'">'.date("M", mktime(0,0,0,$i,1,2000)).'</option>';
 		}
-		for($i=2000; $i<2015; $i++) {
+		for($i=2000; $i<2025; $i++) {
 			if($i==date("Y", time())) $year.='<option value="'.$i.'" selected="selected">'.date("Y", time()).'</option>';
 			else $year.='<option value="'.$i.'">'.$i.'</option>';
 		}
@@ -156,6 +156,7 @@ elseif($action=="save") {
 	if(isset($_POST['map_name'])) $maplist = $_POST['map_name'];
 	if(isset($_POST['map_result_home'])) $homescr = $_POST['map_result_home'];
 	if(isset($_POST['map_result_opp'])) $oppscr = $_POST['map_result_opp'];
+	if(isset($_POST['map_format'])) $format = $_POST['map_format'];
 
 	$maps = array();
 	if(!empty($maplist)) {
@@ -192,6 +193,16 @@ elseif($action=="save") {
 	}
 	$theOppScore = serialize($results);
 	
+	$formats = array();
+	if (!empty($format)) {
+		if (is_array($format)) {
+			foreach ($format as $result) {
+				$formats[] = $result;
+			}
+		}
+	}
+	$format = serialize($formats);
+	
 	$team=array();
 	if(is_array($hometeam)) {
 		foreach($hometeam as $player) {
@@ -210,8 +221,8 @@ elseif($action=="save") {
 
 	$date=mktime(0,0,0,$month,$day,$year);
 
-	safe_query("INSERT INTO ".PREFIX."clanwars ( date, squad, game, league, leaguehp, opponent, opptag, oppcountry, opphp, maps, hometeam, oppteam, server, hltv, homescore, oppscore, report, comments, linkpage)
-                 VALUES( '$date', '$squad', '$game', '".$league."', '$leaguehp', '".$opponent."', '".$opptag."', '$oppcountry', '$opphp', '".$theMaps."', '$home_string', '$opp_string', '$server', '$hltv', '$theHomeScore', '$theOppScore', '".$report."', '$comments', '$linkpage' ) ");
+	safe_query("INSERT INTO ".PREFIX."clanwars ( date, squad, game, league, leaguehp, opponent, opptag, oppcountry, opphp, maps, format, hometeam, oppteam, server, hltv, homescore, oppscore, report, comments, linkpage)
+                 VALUES( '$date', '$squad', '$game', '".$league."', '$leaguehp', '".$opponent."', '".$opptag."', '$oppcountry', '$opphp', '".$theMaps."', '".$format."', '$home_string', '$opp_string', '$server', '$hltv', '$theHomeScore', '$theOppScore', '".$report."', '$comments', '$linkpage' ) ");
 
 	$cwID=mysql_insert_id();
 	$date=date("d.m.Y", $date);
@@ -261,8 +272,18 @@ elseif($action=="save") {
 		$maps = unserialize($backup_theMaps);
 		$scoreHome = unserialize($theHomeScore);
 		$scoreOpp = unserialize($theOppScore);
-		$homescr=array_sum($scoreHome);
-		$oppscr=array_sum($scoreOpp);
+		$homescr=0;
+		$oppscr=0;
+		$homescrArray=unserialize($ds['homescore']);
+		$oppscrArray=unserialize($ds['oppscore']);
+		for ($i = 0; $i < count($homescrArray); ++$i) {
+			if ($homescrArray[$i] > $oppscrArray[$i]) {
+				++$homescr;
+			}
+			else {
+				++$oppscr;
+			}
+		}
 
 		/*if($homescr>$oppscr) {
 			$results='[color='.$wincolor.'][b]'.$homescr.':'.$oppscr.'[/b][/color]';
@@ -419,7 +440,7 @@ elseif($action=="edit") {
 			if($i==date("n", $ds['date'])) $month.='<option value="'.$i.'" selected="selected">'.date("M", $ds['date']).'</option>';
 			else $month.='<option value="'.$i.'">'.date("M", mktime(0,0,0,$i,1,2000)).'</option>';
 		}
-		for($i=2000; $i<2015; $i++) {
+		for($i=2000; $i<2025; $i++) {
 			if($i==date("Y", $ds['date'])) $year.='<option selected="selected">'.$i.'</option>';
 			else $year.='<option>'.$i.'</option>';
 		}
@@ -446,16 +467,18 @@ elseif($action=="edit") {
 		$map = unserialize($ds['maps']);
 		$theHomeScore = unserialize($ds['homescore']);
 		$theOppScore = unserialize($ds['oppscore']);
+		$format = unserialize($ds['format']);
 		$i=0;
 		for($i=0; $i<count($map); $i++) {
 			
       $maps.='
       <tr>
-        <td width="15%"><input type="hidden" name="map_id[]" value="'.$i.'" />map #'.($i+1).'</td>
-				<td width="25%"><input type="text" name="map_name[]" value="'.getinput($map[$i]).'" size="35" /></td>
-				<td width="20%"><input type="text" name="map_result_home[]" value="'.$theHomeScore[$i].'" size="3" /></td>
-				<td width="20%"><input type="text" name="map_result_opp[]" value="'.$theOppScore[$i].'" size="3" /></td>
-				<td width="25%"><input type="checkbox" name="delete['.$i.']" value="1" /> '.$_language->module['delete'].'</td>
+        <td width="15%"><input type="hidden" name="map_id[]" value="'.$i.'" />match #'.($i+1).'</td>
+				<td width="35%"><input type="text" name="map_name[]" value="'.getinput($map[$i]).'" size="35" /></td>
+				<td width="15%"><input type="text" name="map_result_home[]" value="'.$theHomeScore[$i].'" size="3" /></td>
+				<td width="15%"><input type="text" name="map_result_opp[]" value="'.$theOppScore[$i].'" size="3" /></td>
+				<td width="10%"><input type="text" name="map_format[]" value="'.$format[$i].'" size="3"</td>
+				<td width="10%"><input type="checkbox" name="delete['.$i.']" value="1" /> '.$_language->module['delete'].'</td>
 			</tr>';
 		}
 
@@ -533,6 +556,7 @@ elseif($action=="saveedit") {
 	$maplist = $_POST['map_name'];
 	$homescr = $_POST['map_result_home'];
 	$oppscr = $_POST['map_result_opp'];
+	$format = $_POST['map_format'];
 	if(isset($_POST['delete'])) $delete = $_POST['delete'];
 	else $delete = array();
 	
@@ -540,6 +564,7 @@ elseif($action=="saveedit") {
 	$theMaps = array();
 	$theHomeScore = array();
 	$theOppScore = array();
+	$theFormat = array();
 	
 	if(is_array($maplist)){
 		foreach($maplist as $key=>$map) {
@@ -547,6 +572,7 @@ elseif($action=="saveedit") {
 				$theMaps[]=stripslashes($map);
 				$theHomeScore[]=$homescr[$key];
 				$theOppScore[]=$oppscr[$key];
+				$theFormat[]=$format[$key];
 			}
 		}
 	}
@@ -558,6 +584,7 @@ elseif($action=="saveedit") {
 	}
 	$theHomeScore = serialize($theHomeScore);
 	$theOppScore = serialize($theOppScore);
+	$theFormat = serialize($theFormat);
 
 	echo'<script src="js/bbcode.js" language="jscript" type="text/javascript"></script>
   <link href="_stylesheet.css" rel="stylesheet" type="text/css">';
@@ -589,6 +616,7 @@ elseif($action=="saveedit") {
 								 oppcountry='$oppcountry',
 								 opphp='$opphp',
 								 maps='".$theMaps."',
+								 format='".$theFormat."',
 								 hometeam='".$home_string."',
 								 oppteam='".$opp_string."',
 								 server='$server',
@@ -679,8 +707,18 @@ elseif($action=="stats") {
 		$pointsquery = safe_query("SELECT homescore, oppscore FROM ".PREFIX."clanwars WHERE squad = ".$ds['squadID']);
 		while ($dp = mysql_fetch_assoc($pointsquery))
 		{
-			$squadscore = array_sum(unserialize($dp['homescore']));
-			$opponentscore = array_sum(unserialize($dp['oppscore']));
+			$squadscore = 0;
+			$opponentscore = 0;
+			$squadscoreArray = unserialize($dp['homescore']);
+			$opponentscoreArray = unserialize($dp['oppscore']);
+			for ($i = 0; $i < count($squadscoreArray); ++$i) {
+				if ($squadscoreArray[$i] > $opponentscoreArray[$i]) {
+					++$squadscore;
+				}
+				else {
+					++$opponentscore;
+				}
+			}
 			
 			$wonpoints += $squadscore;
 			$lostpoints += $opponentscore;
@@ -692,8 +730,18 @@ elseif($action=="stats") {
 		$pointsquery = safe_query("SELECT homescore, oppscore FROM ".PREFIX."clanwars WHERE opponent = ".$ds['squadID']);
 		while ($dp = mysql_fetch_assoc($pointsquery))
 		{
-			$squadscore = array_sum(unserialize($dp['oppscore']));
-			$opponentscore = array_sum(unserialize($dp['homescore']));
+			$squadscore = 0;
+			$opponentscore = 0;
+			$squadscoreArray = unserialize($dp['oppscore']);
+			$opponentscoreArray = unserialize($dp['homescore']);
+			for ($i = 0; $i < count($squadscoreArray); ++$i) {
+				if ($squadscoreArray[$i] > $opponentscoreArray[$i]) {
+					++$squadscore;
+				}
+				else {
+					++$opponentscore;
+				}
+			}
 			
 			$wonpoints += $squadscore;
 			$lostpoints += $opponentscore;
@@ -843,12 +891,32 @@ elseif($action=="showonly") {
 			//if(file_exists('images/games/'.$ds['game'].'.gif')) $pic = $ds['game'].'.gif';
 			//$game='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['game'].'&amp;page='.$page.'&amp;sort=game&amp;type='.$type.'&amp;only=game"><img src="images/games/'.$pic.'" width="13" height="13" border="0" alt="" /></a>';
 
-			$homescr=array_sum(unserialize($ds['homescore']));
-			$oppscr=array_sum(unserialize($ds['oppscore']));
+			$homescr=0;
+			$oppscr=0;
+			$homescrArray=unserialize($ds['homescore']);
+			$oppscrArray=unserialize($ds['oppscore']);
+			for ($i = 0; $i < count($homescrArray); ++$i) {
+				if ($homescrArray[$i] > $oppscrArray[$i]) {
+					++$homescr;
+				}
+				else {
+					++$oppscr;
+				}
+			}
 
-			if($homescr>$oppscr) $results='<font color="'.$wincolor.'">'.$homescr.':'.$oppscr.'</font>';
-			elseif($homescr<$oppscr) $results='<font color="'.$loosecolor.'">'.$homescr.':'.$oppscr.'</font>';
-			else $results='<font color="'.$drawcolor.'">'.$homescr.':'.$oppscr.'</font>';
+			if ($homescr > $oppscr) {
+				$homecolor = $wincolor;
+				$oppcolor = $loosecolor;
+			}
+			else if ($homescr < $oppscr) {
+				$homecolor = $loosecolor;
+				$oppcolor = $wincolor;
+			}
+			else {
+				$homecolor = $oppcolor = $drawcolor;
+			}
+			
+			$results='<font color="'.$homecolor.'">'.$homescr.'</font>:<font color="'.$oppcolor.'">'.$oppscr.'</font>';
 
 			if(getanzcwcomments($ds['cwID'])) $details='<a href="index.php?site=clanwars_details&amp;cwID='.$ds['cwID'].'"><img src="images/icons/foldericons/newhotfolder.gif" alt="'.$_language->module['details'].'" border="0" /> ('.getanzcwcomments($ds['cwID']).')</a>';
 			else $details='<a href="index.php?site=clanwars_details&amp;cwID='.$ds['cwID'].'"><img src="images/icons/foldericons/folder.gif" alt="'.$_language->module['details'].'" border="0" /> ('.getanzcwcomments($ds['cwID']).')</a>';
@@ -973,12 +1041,32 @@ elseif(empty($_GET['action'])) {
 			if(file_exists('images/games/'.$ds['game'].'.gif')) $pic = $ds['game'].'.gif';
 			//$game='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['game'].'&amp;page='.$page.'&amp;sort=game&amp;type='.$type.'&amp;only=game"><img src="images/games/'.$pic.'" width="13" height="13" border="0" alt="" /></a>';
 
-			$homescr=array_sum(unserialize($ds['homescore']));
-			$oppscr=array_sum(unserialize($ds['oppscore']));
-
-			if($homescr>$oppscr) $results='<font color="'.$wincolor.'">'.$homescr.':'.$oppscr.'</font>';
-			elseif($homescr<$oppscr) $results='<font color="'.$loosecolor.'">'.$homescr.':'.$oppscr.'</font>';
-			else $results='<font color="'.$drawcolor.'">'.$homescr.':'.$oppscr.'</font>';
+			$homescr=0;
+			$oppscr=0;
+			$homescrArray=unserialize($ds['homescore']);
+			$oppscrArray=unserialize($ds['oppscore']);
+			for ($i = 0; $i < count($homescrArray); ++$i) {
+				if ($homescrArray[$i] > $oppscrArray[$i]) {
+					++$homescr;
+				}
+				else {
+					++$oppscr;
+				}
+			}
+			
+			if ($homescr > $oppscr) {
+				$homecolor = $wincolor;
+				$oppcolor = $loosecolor;
+			}
+			else if ($homescr < $oppscr) {
+				$homecolor = $loosecolor;
+				$oppcolor = $wincolor;
+			}
+			else {
+				$homecolor = $oppcolor = $drawcolor;
+			}
+			
+			$results='<font color="'.$homecolor.'">'.$homescr.'</font>:<font color="'.$oppcolor.'">'.$oppscr.'</font>';
 
 			if($anzcomments = getanzcwcomments($ds['cwID'])) $details='<a href="index.php?site=clanwars_details&amp;cwID='.$ds['cwID'].'"><img src="images/icons/foldericons/newhotfolder.gif" alt="'.$_language->module['details'].'" border="0" /> ('.$anzcomments.')</a>';
 			else $details='<a href="index.php?site=clanwars_details&amp;cwID='.$ds['cwID'].'"><img src="images/icons/foldericons/folder.gif" alt="'.$_language->module['details'].'" border="0" /> (0)</a>';

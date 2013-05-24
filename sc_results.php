@@ -32,8 +32,29 @@ if(mysql_num_rows($ergebnis)){
 	while($ds=mysql_fetch_assoc($ergebnis)) {
 		//var_dump($ds);
 		$date=date("d.m.Y", $ds['date']);
-		$homescr=array_sum(unserialize($ds['homescore']));
-		$oppscr=array_sum(unserialize($ds['oppscore']));
+		$homescr=0;
+		$oppscr=0;
+		$homescrArray=unserialize($ds['homescore']);
+		$oppscrArray=unserialize($ds['oppscore']);
+		for ($i = 0; $i < count($homescrArray); ++$i) {
+			if ($homescrArray[$i] > $oppscrArray[$i]) {
+				++$homescr;
+			}
+			else {
+				++$oppscr;
+			}
+		}
+		if ($homescr > $oppscr) {
+			$homecolor = $wincolor;
+			$oppcolor = $loosecolor;
+		}
+		else if ($homescr < $oppscr) {
+			$homecolor = $loosecolor;
+			$oppcolor = $wincolor;
+		}
+		else {
+			$homecolor = $oppcolor = $drawcolor;
+		}
 		
 		if($n%2) {
 			$bg1=BG_1;
@@ -44,9 +65,7 @@ if(mysql_num_rows($ergebnis)){
 			$bg2=BG_4;
 		}
 
-		if($homescr>$oppscr) $result='<font color="'.$wincolor.'">'.$homescr.':'.$oppscr.'</font>';
-		elseif($homescr<$oppscr) $result='<font color="'.$loosecolor.'">'.$homescr.':'.$oppscr.'</font>';
-		else $result='<font color="'.$drawcolor.'">'.$homescr.':'.$oppscr.'</font>';
+		$result='<font color="'.$homecolor.'">'.$homescr.'</font>:<font color="'.$oppcolor.'">'.$oppscr.'</font>';
 
 		$resultID=$ds['cwID'];
 		$gameicon="images/games/";

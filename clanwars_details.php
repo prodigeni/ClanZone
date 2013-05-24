@@ -37,8 +37,7 @@ if(!isset($_GET['action'])) {
 	$ds=mysql_fetch_array(safe_query("SELECT * FROM ".PREFIX."clanwars WHERE cwID='$cwID'"));
 	$date=date("d.m.Y", $ds['date']);
 	$league='<a href="'.getinput($ds['leaguehp']).'" target="_blank">'.getinput($ds['league']).'</a>';
-	//if(file_exists('images/games/'.$ds['game'].'.gif')) $game_ico = 'images/games/'.$ds['game'].'.gif';
-	//$game='<img src="'.$game_ico.'" width="13" height="13" border="0" alt="" />';
+	
 	$maps="";
 	$hometeam="";
 	$oppteam="";
@@ -49,37 +48,55 @@ if(!isset($_GET['action'])) {
 	$nbr="";
 
 	// v1.0
-	$homescr = array_sum(unserialize($ds['homescore']));
-	$oppscr = array_sum(unserialize($ds['oppscore']));
+	$homescr = 0;
+	$oppscr = 0;
+	$homescrArray = unserialize($ds['homescore']);
+	$oppscrArray = unserialize($ds['oppscore']);
+	
+	for ($i = 0; $i < count($homescrArray); ++$i) {
+		if ($homescrArray[$i] > $oppscrArray[$i]) {
+			++$homescr;
+		}
+		else {
+			++$oppscr;
+		}
+	}
+	
+	if ($homescr > $oppscr) {
+		$homecolor = $wincolor;
+		$oppcolor = $loosecolor;
+	}
+	else if ($homescr < $oppscr) {
+		$homecolor = $loosecolor;
+		$oppcolor = $wincolor;
+	}
+	else {
+		$homecolor = $oppcolor = $drawcolor;
+	}
+	
+	$results_1='<font color="'.$homecolor.'">'.$homescr.'</font>';
+	$results_2='<font color="'.$oppcolor.'">'.$oppscr.'</font>';
+	
 	$theMaps = unserialize($ds['maps']);
-
-  if(is_array($theMaps)) {
+	$theFormats = unserialize($ds['format']);
+	
+	if(is_array($theMaps)) {
+		$mapsTmp = array_unique($theMaps);
 		$n=1;
-		foreach($theMaps as $map) {
+		foreach($mapsTmp as $map) {
 			if($n == 1) {
 				$maps.=$map;
-			} else {
+			}
+			else {
 				if($map=='') {
 					$maps=$_language->module['no_maps'];
-				} else {
+				}
+				else {
 					$maps.=', '.$map;
 				}
 			}
 			$n++;
 		}
-	}
-
-	if($homescr>$oppscr){
-		$results_1='<font color="'.$wincolor.'">'.$homescr.'</font>';
-		$results_2='<font color="'.$wincolor.'">'.$oppscr.'</font>';
-	}
-	elseif($homescr<$oppscr){
-		$results_1='<font color="'.$loosecolor.'">'.$homescr.'</font>';
-		$results_2='<font color="'.$loosecolor.'">'.$oppscr.'</font>';
-	}
-	else{
-		$results_1='<font color="'.$drawcolor.'">'.$homescr.'</font>';
-		$results_2='<font color="'.$drawcolor.'">'.$oppscr.'</font>';
 	}
 
 	if(isclanwaradmin($userID))
@@ -132,12 +149,6 @@ if(!isset($_GET['action'])) {
 		foreach($screens as $screen) {
 			if(!empty($screen)) {
 				$screenshots.='<a href="images/clanwar-screens/'.$screen.'" target="_blank"><img src="images/clanwar-screens/'.$screen.'" width="150" height="100" border="0" style="padding-top:3px; padding-right:3px;" alt="" /></a>';
-				if($nbr==2) {
-					$nbr=1;
-					$screenshots.='<br />';
-				} else {
-					$nbr=2;
-				}
 				$n++;
 			}
 		}
@@ -156,12 +167,12 @@ if(!isset($_GET['action'])) {
 
 	// -- v1.0, extended results -- //
 
-	$scoreHome=unserialize($ds['homescore']);
-	$scoreOpp=unserialize($ds['oppscore']);
-	$homescr=array_sum($scoreHome);
-	$oppscr=array_sum($scoreOpp);
+	//$scoreHome=unserialize($ds['homescore']);
+	//$scoreOpp=unserialize($ds['oppscore']);
+	//$homescr=array_sum($scoreHome);
+	//$oppscr=array_sum($scoreOpp);
 
-	if($homescr>$oppscr) {
+	/*if($homescr>$oppscr) {
 		$result_map='[color='.$wincolor.'][b]'.$homescr.':'.$oppscr.'[/b][/color]';
 		$result_map2='won';
 	}
@@ -172,30 +183,36 @@ if(!isset($_GET['action'])) {
 	else {
 		$result_map='[color='.$drawcolor.'][b]'.$homescr.':'.$oppscr.'[/b][/color]';
 		$result_map2='draw';
-	}
+	}*/
 
   if(is_array($theMaps)) {
 		$d=0;
+		$matchID=1;
 		foreach($theMaps as $map) {
 			$score='';
       		if(($d+1)%2) { $bgone=BG_1; $bgtwo=BG_2; } else { $bgone=BG_3; $bgtwo=BG_4; }
-			if($scoreHome[$d] > $scoreOpp[$d]){
-				$score_1='<font color="'.$wincolor.'"><b>'.$scoreHome[$d].'</b></font>';
-				$score_2='<font color="'.$wincolor.'"><b>'.$scoreOpp[$d].'</b></font>';
+			
+			if ($homescrArray[$d] > $oppscrArray[$d]) {
+				$homecolor = $wincolor;
+				$oppcolor = $loosecolor;
 			}
-			elseif($scoreHome[$d] < $scoreOpp[$d]){
-				$score_1='<font color="'.$loosecolor.'"><b>'.$scoreHome[$d].'</b></font>';
-				$score_2='<font color="'.$loosecolor.'"><b>'.$scoreOpp[$d].'</b></font>';
+			else if ($homescrArray[$d] < $oppscrArray[$d]) {
+				$homecolor = $loosecolor;
+				$oppcolor = $wincolor;
 			}
-			else{
-				$score_1='<font color="'.$drawcolor.'"><b>'.$scoreHome[$d].'</b></font>';
-				$score_2='<font color="'.$drawcolor.'"><b>'.$scoreOpp[$d].'</b></font>';
+			else {
+				$homecolor = $oppcolor = $drawcolor;
 			}
+			
+			$score_1='<font color="'.$homecolor.'">'.$homescrArray[$d].'</font>';
+			$score_2='<font color="'.$oppcolor.'">'.$oppscrArray[$d].'</font>';
+			$format = $theFormats[$d];
 			
       		eval ("\$clanwars_details_results = \"".gettemplate("clanwars_details_results")."\";");
       		$extendedresults.=$clanwars_details_results;
 			unset($score);
 			$d++;
+			$matchID++;
 		}
 	} else $extendedresults='';
 

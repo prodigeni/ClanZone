@@ -77,8 +77,6 @@ function chkFormular() {
       <tr>
         <td>%server%:</td>
         <td><input name="server" type="text" value="$server" size="35" /></td>
-        <td>%hltv_server%:</td>
-        <td><input name="hltv" type="text" size="35" /></td>
       </tr>
       <tr>
         <td colspan="4"><hr /></td>
@@ -96,12 +94,13 @@ function chkFormular() {
         <td colspan="4">
         <table width="100%" id="maplist">
           <tr>
-            <td width="15%">%map% %id%:</td>
-            <td width="30%">%map%:</td>
-            <td width="20%">%score_home%:</td>
-            <td width="20%">%score_opponent%:</td>
-            <td><a href="javascript:;" onclick="addRow();" title="add map"><img src="images/icons/expand.gif" border="0" alt="" /></a>
-            <a href="javascript:;" onclick="removeRow();" title="remove map"><img src="images/icons/collapse.gif" border="0" alt="" /></a></td>
+            <td width="15%">%match% %id%:</td>
+            <td width="35%">%map%:</td>
+            <td width="15%">%score_home%:</td>
+            <td width="15%">%score_opponent%:</td>
+            <td width="10%">%format%:</td>
+            <td><a href="javascript:;" onclick="addRow();" title="add match"><img src="images/icons/expand.gif" border="0" alt="" /></a>
+            <a href="javascript:;" onclick="removeRow();" title="remove match"><img src="images/icons/collapse.gif" border="0" alt="" /></a></td>
           </tr>
         </table>
         </td>

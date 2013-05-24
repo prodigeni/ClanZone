@@ -345,7 +345,7 @@ function addRow(action)
 	
 	// gibt nen text wie "map #1" aus
 	var cell0 = row.insertCell(0);
-	var textNode = document.createTextNode('map #' + inkrement);
+	var textNode = document.createTextNode('match #' + inkrement);
 	if(theAction=='edit') {
 		var ele0 = document.createElement('input');
 			ele0.setAttribute('type', 'hidden');
@@ -381,18 +381,26 @@ function addRow(action)
 		ele3.setAttribute('size', '3');
 		ele3.className='form_off';
 	cell3.appendChild(ele3);
+	// format
+	var cell4 = row.insertCell(4);
+	var ele4 = document.createElement('input');
+		ele4.setAttribute('type', 'text');
+		ele4.setAttribute('name', 'map_format[]');
+		ele4.setAttribute('id', 'map_format_' + inkrement);
+		ele4.setAttribute('size', '3');
+	cell4.appendChild(ele4);
 	// create delete-selection for edit-function
+	
+	// by an unfortunate maintainer: isn't this useless?
+	/*var cell5 = row.insertCell(5);
 	if(theAction=='edit') {
-		var cell4 = row.insertCell(4);
-		var ele4 = document.createElement('input');
-			ele4.setAttribute('type', 'checkbox');
-			ele4.setAttribute('name', 'delete[]');
-			ele4.setAttribute('value', inkrement);
-			ele4.className='form_off';
-		cell4.appendChild(ele4);
-	} else {
-		var cell4 = row.insertCell(4);
-	}
+		var ele5 = document.createElement('input');
+			ele5.setAttribute('type', 'checkbox');
+			ele5.setAttribute('name', 'delete[]');
+			ele5.setAttribute('value', inkrement);
+			ele5.className='form_off';
+		cell5.appendChild(ele5);
+	}*/
 }
 
 // function removeRow() ** removes the last row of a table
