@@ -1,4 +1,4 @@
-/tmp/*.jpg
+/tmp/
 /.project
 /_mysql.php
 /_recaptcha.php
