@@ -85,7 +85,6 @@ if($action=="new") {
 		$leaguehp="http://";
 		$opphp="http://";
 		$linkpage="http://";
-		$server = "";
 		$league = "";
 		$opponent = "";
 		$opptag = "";
@@ -102,7 +101,6 @@ if($action=="new") {
 
 			$squads=str_replace(" selected=\"selected\"", "", $squads);
 			$squads=str_replace('value="'.$ds['squad'].'"', 'value="'.$ds['squad'].'" selected="selected"', $squads);
-			$server = $ds['server'];
 			$day=str_replace(" selected=\"selected\"", "", $day);
 			$day=str_replace('<option>'.date("j", $ds['date']).'</option>', '<option selected="selected">'.date("j", $ds['date']).'</option>', $day);
 			$month=str_replace(" selected=\"selected\"", "", $month);
@@ -144,8 +142,6 @@ elseif($action=="save") {
 	$oppcountry = $_POST['oppcountry'];
 	$opphp = $_POST['opphp'];
 	$oppteam = $_POST['oppteam'];
-	$server = $_POST['server'];
-	$hltv = $_POST['hltv'];
 	$report = $_POST['message'];
 	$comments = $_POST['comments'];
 	$linkpage = $_POST['linkpage'];
@@ -222,7 +218,7 @@ elseif($action=="save") {
 	$date=mktime(0,0,0,$month,$day,$year);
 
 	safe_query("INSERT INTO ".PREFIX."clanwars ( date, squad, game, league, leaguehp, opponent, opptag, oppcountry, opphp, maps, format, hometeam, oppteam, server, hltv, homescore, oppscore, report, comments, linkpage)
-                 VALUES( '$date', '$squad', '$game', '".$league."', '$leaguehp', '".$opponent."', '".$opptag."', '$oppcountry', '$opphp', '".$theMaps."', '".$format."', '$home_string', '$opp_string', '$server', '$hltv', '$theHomeScore', '$theOppScore', '".$report."', '$comments', '$linkpage' ) ");
+                 VALUES( '$date', '$squad', '$game', '".$league."', '$leaguehp', '".$opponent."', '".$opptag."', '$oppcountry', '$opphp', '".$theMaps."', '".$format."', '$home_string', '$opp_string', '', '', '$theHomeScore', '$theOppScore', '".$report."', '$comments', '$linkpage' ) ");
 
 	$cwID=mysql_insert_id();
 	$date=date("d.m.Y", $date);
@@ -457,8 +453,6 @@ elseif($action=="edit") {
 		$countries=str_replace('value="'.$ds['oppcountry'].'"', 'value="'.$ds['oppcountry'].'" selected="selected"', $countries);
 		$opphp=htmlspecialchars($ds['opphp']);
 		//$oppteam=htmlspecialchars($ds['oppteam']);
-		$server=htmlspecialchars($ds['server']);
-		$hltv=htmlspecialchars($ds['hltv']);
 		$linkpage=htmlspecialchars($ds['linkpage']);
 		$report=htmlspecialchars($ds['report']);
 		$linkpage=htmlspecialchars($ds['linkpage']);
@@ -548,8 +542,6 @@ elseif($action=="saveedit") {
 	$oppcountry = $_POST['oppcountry'];
 	$opphp = $_POST['opphp'];
 	$oppteam = $_POST['oppteam'];
-	$server = $_POST['server'];
-	$hltv = $_POST['hltv'];
 	$report = $_POST['message'];
 	$comments = $_POST['comments'];
 	$linkpage = $_POST['linkpage'];
@@ -619,8 +611,8 @@ elseif($action=="saveedit") {
 								 format='".$theFormat."',
 								 hometeam='".$home_string."',
 								 oppteam='".$opp_string."',
-								 server='$server',
-								 hltv='$hltv',
+								 server='',
+								 hltv='',
 								 homescore='$theHomeScore',
 								 oppscore='$theOppScore',
 								 report='".$report."',
@@ -883,7 +875,6 @@ elseif($action=="showonly") {
 			$maps=$ds['maps'];
 			$hometeam=$ds['hometeam'];
 			$oppteam=$ds['oppteam'];
-			$server=$ds['server'];
 
 			$squad='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['squad'].'&amp;page='.$page.'&amp;sort=date&amp;type='.$type.'&amp;only=squad"><b>'.$ds['squadname'].'</b></a>';
 			$opponent='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['opponent'].'&amp;page='.$page.'&amp;sort=date&amp;type='.$type.'&amp;only=squad"><b>'.$ds['oppname'].'</b></a>';
@@ -1037,7 +1028,6 @@ elseif(empty($_GET['action'])) {
 			$opponent='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['opponent'].'&amp;page='.$page.'&amp;sort=date&amp;type='.$type.'&amp;only=squad"><b>'.$ds['oppname'].'</b></a>';
 			$hometeam=$ds['hometeam'];
 			$oppteam=$ds['oppteam'];
-			$server=$ds['server'];
 			if(file_exists('images/games/'.$ds['game'].'.gif')) $pic = $ds['game'].'.gif';
 			//$game='<a href="index.php?site=clanwars&amp;action=showonly&amp;id='.$ds['game'].'&amp;page='.$page.'&amp;sort=game&amp;type='.$type.'&amp;only=game"><img src="images/games/'.$pic.'" width="13" height="13" border="0" alt="" /></a>';
 

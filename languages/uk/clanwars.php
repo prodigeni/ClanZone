@@ -83,7 +83,6 @@ $language_array = Array(
 	'score_opponent'=>'score team 2',
 	'screenshots'=>'Screenshots',
 	'select_all'=>'select all',
-	'server'=>'Server',
 	'show_all_squads'=>'show all clans',
 	'show_clanwars'=>'show all clanwars',
 	'sort'=>'sort',

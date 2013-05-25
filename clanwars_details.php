@@ -38,7 +38,6 @@ if(!isset($_GET['action'])) {
 	$date=date("d.m.Y", $ds['date']);
 	$league='<a href="'.getinput($ds['leaguehp']).'" target="_blank">'.getinput($ds['league']).'</a>';
 	
-	$maps="";
 	$hometeam="";
 	$oppteam="";
 	$screens="";
@@ -79,25 +78,6 @@ if(!isset($_GET['action'])) {
 	
 	$theMaps = unserialize($ds['maps']);
 	$theFormats = unserialize($ds['format']);
-	
-	if(is_array($theMaps)) {
-		$mapsTmp = array_unique($theMaps);
-		$n=1;
-		foreach($mapsTmp as $map) {
-			if($n == 1) {
-				$maps.=$map;
-			}
-			else {
-				if($map=='') {
-					$maps=$_language->module['no_maps'];
-				}
-				else {
-					$maps.=', '.$map;
-				}
-			}
-			$n++;
-		}
-	}
 
 	if(isclanwaradmin($userID))
 	$adminaction='<input type="button" onclick="MM_openBrWindow(\'upload.php?cwID='.$cwID.'\',\'Clanwars\',\'toolbar=no,status=no,scrollbars=yes,width=800,height=600\')" value="'.$_language->module['upload_screenshot'].'" class="button1"/>
@@ -114,11 +94,6 @@ if(!isset($_GET['action'])) {
 	
 	$squad='<a href="index.php?site=clanwars&amp;action=showonly&amp;only=squad&amp;id='.$ds['squad'].'"><b>'.$squadname.'</b></a>';
 	$opponent='<a href="index.php?site=clanwars&amp;action=showonly&amp;only=squad&amp;id='.$ds['opponent'].'"><b>'.$oppname.'</b></a>';
-	
-	//$opptag=getinput($ds['opptag']);
-	//$oppteam=getinput($ds['oppteam']);
-	$server=getinput($ds['server']);
-	$hltv=getinput($ds['hltv']);
 
   if(!empty($ds['hometeam'])) {
 		$array=unserialize($ds['hometeam']);
