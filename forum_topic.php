@@ -630,6 +630,8 @@ $thread = safe_query("SELECT * FROM ".PREFIX."forum_topics WHERE topicID='$topic
 if($loggedin) {
 	$message = cleartext(getforminput($_POST['message']));			
 	$message = toggle($message, 'xx');
+	
+	$board = $dt['boardID'];
 	eval ("\$addbbcode = \"".gettemplate("addbbcode")."\";");
     	eval ("\$forum_quickreply = \"".gettemplate("forum_quickreply")."\";");
     	echo $forum_quickreply;

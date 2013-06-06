@@ -712,7 +712,6 @@ foreach($topicID as $id) {
 		if(!isforumadmin($userID) and !ismoderator($userID, $board)) die($_language->module['no_access']);
 		
 		$numposts = mysql_num_rows(safe_query("SELECT postID FROM ".PREFIX."forum_posts WHERE topicID='".$topicID."'"));
-		$numposts --;
 		
 		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1, posts=posts-".$numposts." WHERE boardID='".$board."' ");
 		safe_query("DELETE FROM ".PREFIX."forum_topics WHERE topicID='$topicID' ");
@@ -787,7 +786,7 @@ foreach($topicID as $id) {
 			else {
 				safe_query("DELETE FROM ".PREFIX."forum_posts WHERE postID='".(int)$id."' ");
 				safe_query("DELETE FROM ".PREFIX."forum_topics WHERE topicID='$topicID' OR moveID='$topicID'");
-				safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1 WHERE boardID='".$board."' ");
+				safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1, posts=posts-1 WHERE boardID='".$board."' ");
 				$deleted=true;
 			}
 		}
@@ -816,11 +815,9 @@ foreach($topicID as $id) {
 
 		safe_query("UPDATE ".PREFIX."forum_topics SET boardID='$toboard', readgrps='".$di['readgrps']."', writegrps='".$di['writegrps']."' WHERE topicID='$id'");
 		safe_query("UPDATE ".PREFIX."forum_posts SET boardID='$toboard' WHERE topicID='$id'");
-		$post_num = mysql_affected_rows()-1;
-		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics+1 WHERE boardID='$toboard'");
-		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1 WHERE boardID='".$ds['boardID']."'");
-		safe_query("UPDATE ".PREFIX."forum_boards SET posts=posts+".$post_num." WHERE boardID='".$toboard."'");
-		safe_query("UPDATE ".PREFIX."forum_boards SET posts=posts-".$post_num." WHERE boardID='".$ds['boardID']."'");
+		$post_num = mysql_affected_rows();
+		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics+1, posts=posts+".$post_num." WHERE boardID='$toboard'");
+		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1, posts=posts-".$post_num." WHERE boardID='".$ds['boardID']."'");
 	}
 	header("Location: index.php?site=forum&board=$toboard");
 }
@@ -909,7 +906,7 @@ foreach($topicID as $id) {
 			$date=time();
 			safe_query("INSERT INTO ".PREFIX."forum_topics ( boardID, readgrps, writegrps, userID, date, icon, topic, lastdate, lastposter, replys, views, closed, sticky ) values ( '$board', '".$ds['readgrps']."', '".$ds['writegrps']."', '$userID', '$date', '".$icon."', '".$topicname."', '$date', '$userID', '0', '0', '0', '$topic_sticky' ) ");
 			$id=mysql_insert_id();
-			safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics+1 WHERE boardID='".$board."'");
+			safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics+1, posts=posts+1 WHERE boardID='".$board."'");
 			safe_query("INSERT INTO ".PREFIX."forum_posts ( boardID, topicID, date, poster, message ) values( '$board', '$id', '$date', '$userID', '".$message."' ) ");
 	
 			// check if there are more than 1000 unread topics => delete oldest one
@@ -1073,7 +1070,7 @@ foreach($topicID as $id) {
 		}
 	}
 	/*BEGIN: New adminactions to modify several topics*/
-else if($_POST['deletetopics']) {
+else if(isset($_POST['deletetopics'])) {
 	include("_mysql.php");
 	include("_settings.php");
 	include('_functions.php');
@@ -1085,8 +1082,7 @@ else if($_POST['deletetopics']) {
 	if(!isforumadmin($userID) and !ismoderator($userID, $board)) die($_language->module['no_access']);
 	foreach($topicID as $id) {
 		$numposts = mysql_num_rows(safe_query("SELECT postID FROM ".PREFIX."forum_posts WHERE topicID='".$id."'"));
-		$numposts --;
-		
+
 		safe_query("UPDATE ".PREFIX."forum_boards SET topics=topics-1, posts=posts-".$numposts." WHERE boardID='".$board."' ");
 		safe_query("DELETE FROM ".PREFIX."forum_topics WHERE topicID='$id' ");
 		safe_query("DELETE FROM ".PREFIX."forum_topics WHERE moveID='$id' ");
