@@ -1,11 +1,14 @@
-<div id="login_area">
-<form method="post" name="login" action="checklogin.php">
-	<fieldset>
-		<legend><span class="first_letter">l</span>ogin <span class="first_letter">a</span>rea</legend>
-		<span class="first_letter">u</span>ser: <input name="ws_user" type="text" size="13"/><br/>
-		<span class="first_letter">p</span>assword: <input name="pwd" type="password" size="13"/><br/>
-		<a href="index.php?site=register">register</a> | <a href="index.php?site=lostpassword">lost pw</a><input type="submit" name="submit" value="login"/>
-		<!--<a href="index.php?site=registered_users">%registered_users%</a>-->
-	</fieldset>
+<div class="login_bg">
+<div class="login_area">
+<form method="post" name="login" action="checklogin.php"> 
+<div style="float: right;">
+	<div style="float: left;"><img src="images/login_user.png" width="80" height="35" /></div> 
+	<div style="float: left; padding-top: 5px;"><input class="login_css" name="ws_user" type="text" size="13" value="Username" onfocus="this.value=''" /></div>
+    <div style="float: left;"><img src="images/login_pw.png" width="80" height="35" /></div>
+	<div style="float: left; padding-top: 5px; padding-right: 5px;"><input class="login_css" name="pwd" type="password" size="13" value="Password" onfocus="this.value=''" /></div>
+	<input id="login_bt" type="submit" name="submit" value="%login%" />
+</div>
 </form>
 </div>
+</div>
+<div style="clear: both;"></div>

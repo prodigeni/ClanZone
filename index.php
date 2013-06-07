@@ -46,6 +46,26 @@ $index_language = $_language->module;
 <title><?php echo PAGETITLE; ?></title>
 <link href="_stylesheet.css" rel="stylesheet" type="text/css"/>
 <?php if ($_GET['site'] == 'forum' || $_GET['site'] == 'forum_topic') echo "<link href=\"_forum.css\" rel=\"stylesheet\" type=\"text/css\"/>\n"; ?>
+<link rel="stylesheet" href="css/login.css" type="text/css" media="screen" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">	
+	$(document).ready(function(){			
+		$(".togglebox .togglebox_title").click(function(){
+			var contentbox = $(this).next(".togglebox_content_holder");
+			if (contentbox.is(":hidden")) {
+				$(this).addClass("open");
+				contentbox.slideDown("fast", function () {
+					contentbox.addClass("open");					
+				});
+			}else{
+				$(this).removeClass("open");
+				contentbox.slideUp("fast", function () {
+					contentbox.removeClass("open");											 
+				});		
+			}
+		});		
+	});		
+</script>
 <script src="js/bbcode.js" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
@@ -53,10 +73,11 @@ $index_language = $_language->module;
 <script src="js/index.js" type="text/javascript"></script>
 </head>
 <body>
+<?php include "login.php"; ?></br></br></br>
 <div id="wrap">
 	<div id="header">
 		<div id="banner"><a href="index.php"><img src="images/banner.png" width="400" height="100"/></a></div>
-		<?php include "login.php"; ?>
+		
 	</div>
 	<div id="page">
 		<div id="left_column">

@@ -1,16 +1,25 @@
-<div id="login_area_logged">
-<div onclick="slideElement('#profile_info', 400)" id="profile_show_info">Logged in as <br/>$username</div>
-<div id="profile_info">
-<div class="center">$l_avatar</div>
-<ul class="profile_menu">
-	<li><a href="index.php?site=loginoverview">%overview%</a></li>
-	<li><a href="index.php?site=myprofile">%edit_account%</a></li>
-	<li><a href="index.php?site=messenger">%messenger%</a>$newmessages</li>
-	<li><a href="index.php?site=usergallery">%galleries%</a></li>
-	<li><a href="index.php?site=buddys">%buddy_list%</a></li>
-	$cashbox
-	$admin
-	<li><a href="logout.php">%logout%</a></li>
-</ul>
+<div class="login_bg">
+<div class="login_area_logged" style="float: right;">
+	<div class="togglebox_holder">
+		<div class="togglebox">
+			<div class="togglebox_title"><h3>%welcome_back% $username</h3></div>
+			<div class="togglebox_content_holder">
+				<div class="togglebox_content">
+                	<div style="width: 90px; padding:2px; border: 1px dashed #303030; float: left;">$l_avatar</div>
+                    <div style="float: left; padding-left: 15px;">
+					&raquo; <a href="index.php?site=loginoverview">%overview%</a><br />
+					&raquo; <a href="index.php?site=myprofile">%edit_account%</a><br />
+					&raquo; <a href="index.php?site=messenger">%messenger%</a>$newmessages<br />
+					&raquo; <a href="index.php?site=usergallery">%galleries%</a><br />
+					&raquo; <a href="index.php?site=buddys">%buddy_list%</a><br />
+					$cashbox
+					$admin
+					&raquo; <a href="logout.php">%logout%</a>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+			</div>
+		</div>
+	</div>
 </div>
 </div>
