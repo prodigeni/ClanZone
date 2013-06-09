@@ -1,11 +1,3 @@
-<!--hier kannst du die Farbe des Captchas anpassen, wähle eine folgender Themes:
-'red','white','blackglass','clean','custom' | weitere Infos zum anpassen des Styles bzw. auch individueller Styles findest du auf www.recaptcha.net-->
-<script>
-var RecaptchaOptions = {
-   theme : 'white',
-   tabindex : 2
-};
-</script>
 <form method="post" name="post" action="index.php?site=register">
 <table width="100%" border="0" cellspacing="0" cellpadding="2" bgcolor="$border">
   <tr bgcolor="$bghead">
@@ -42,8 +34,8 @@ var RecaptchaOptions = {
     <td bgcolor="$bg2">&nbsp;</td>
   </tr>
   <tr>
-    <td align="right" bgcolor="$bg1">&nbsp;</td>
-    <td bgcolor="$bg1">$recaptcha</td>
+    <td align="right" bgcolor="$bg1">$captcha</td>
+    <td bgcolor="$bg1"><input type="text" name="captcha" size="10" /><input name="captcha_hash" type="hidden" value="$hash" /></td>
   </tr>
   <tr>
     <td colspan="2" bgcolor="$pagebg"></td>

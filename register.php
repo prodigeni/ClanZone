@@ -24,10 +24,7 @@
 #                                                                        #
 ##########################################################################
 */
-// Start recaptcha Mod
-require_once('recaptchalib.php');
-include("_recaptcha.php");
-// End recaptcha Mod
+
 $_language->read_module('register');
 
 eval("\$title_register = \"".gettemplate("title_register")."\";");
@@ -42,13 +39,7 @@ if(isset($_POST['save'])) {
 		$pwd1 = $_POST['pwd1'];
 		$pwd2 = $_POST['pwd2'];
 		$mail = $_POST['mail'];
-		//Start recaptcha Mod
-		$resp = recaptcha_check_answer ($privatekey,
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
-		if($resp->is_valid) $run=1;
-		//End recaptcha Mod
+		$CAPCLASS = new Captcha;
 				
 		$error = array();
 	  	
@@ -69,7 +60,7 @@ if(isset($_POST['save'])) {
 		$num = mysql_num_rows($ergebnis);
 		if($num) $error[]=$_language->module['username_inuse'];
 	  
-	  // check passwort
+	  // check password
 		if($pwd1 == $pwd2) {
 			if(!(mb_strlen(trim($pwd1)))) $error[]=$_language->module['enter_password'];
 		}
@@ -84,9 +75,7 @@ if(isset($_POST['save'])) {
 		if($num) $error[]=$_language->module['mail_inuse'];
 	  
 	  // check captcha 
-	  // Start recaptcha Mod
-	    if (empty($_POST["recaptcha_response_field"]) or (!$run)) $error[]=$_language->module['wrong_securitycode'];
-	  // End recapctha Mod			
+	  if(!$CAPCLASS->check_captcha($_POST['captcha'], $_POST['captcha_hash'])) $error[]=$_language->module['wrong_securitycode'];			
 		
 	  	if(count($error)) {
 	    	$list = implode('<br />&#8226; ', $error);
@@ -153,8 +142,12 @@ else {
 			$bg2=BG_2;
 			$bg3=BG_3;
 			$bg4=BG_4;
+			
+			$CAPCLASS = new Captcha;
+			$captcha = $CAPCLASS->create_captcha();
+			$hash = $CAPCLASS->get_hash();
+			$CAPCLASS->clear_oldcaptcha();
 		
-					
 			if(!isset($showerror)) $showerror='';
 			if(isset($_POST['nickname'])) $nickname=getforminput($_POST['nickname']);
 			else $nickname='';
@@ -167,9 +160,6 @@ else {
 			if(isset($_POST['mail'])) $mail=getforminput($_POST['mail']);
 			else $mail='';
 			
-			//Start recaptcha Mod
-			$recaptcha = recaptcha_get_html($publickey, $error);
-			//End recaptcha Mod
 			eval("\$register = \"".gettemplate("register")."\";");
 			echo $register;
 		}

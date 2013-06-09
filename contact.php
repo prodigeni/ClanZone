@@ -24,10 +24,7 @@
 #                                                                        #
 ##########################################################################
 */
-// Start recaptcha Mod
-require_once('recaptchalib.php');
-include("_recaptcha.php");
-// End recaptcha Mod
+
 if(isset($site)) $_language->read_module('contact');
 
 eval ("\$title_contact = \"".gettemplate("title_contact")."\";");
@@ -56,13 +53,9 @@ if($action == "send") {
 		$run=1;
 	}
 	else {
-		//Start recaptcha Mod
-		$resp = recaptcha_check_answer ($privatekey,
-                                        $_SERVER["REMOTE_ADDR"],
-                                        $_POST["recaptcha_challenge_field"],
-                                        $_POST["recaptcha_response_field"]);
-		if($resp->is_valid) $run=1;
-		//End recaptcha Mod
+		$CAPCLASS = new Captcha;
+		if(!$CAPCLASS->check_captcha($_POST['captcha'], $_POST['captcha_hash'])) $fehler[] = $_language->module['wrong_securitycode'];
+		else $run=1;
 	}
 	
 	$fehler = array();
@@ -113,6 +106,10 @@ if($action == "send") {
 	    eval ("\$contact_loggedin = \"".gettemplate("contact_loggedin")."\";");
 		echo $contact_loggedin;
 	} else {
+	    $CAPCLASS = new Captcha;
+		$captcha = $CAPCLASS->create_captcha();
+		$hash = $CAPCLASS->get_hash();
+		$CAPCLASS->clear_oldcaptcha();
 		if(!isset($showerror)) $showerror='';
 	   	if(isset($_POST['name'])) $name = getforminput($_POST['name']);
 	    else $name='';
@@ -123,9 +120,7 @@ if($action == "send") {
 	    if(isset($_POST['text'])) $text = getforminput($_POST['text']);
 	    else $text='';
 
-		//Start recaptcha Mod
-		$recaptcha = recaptcha_get_html($publickey, $error);
-		//End recaptcha Mod
+		
 		eval ("\$contact_notloggedin = \"".gettemplate("contact_notloggedin")."\";");
 		echo $contact_notloggedin;
 

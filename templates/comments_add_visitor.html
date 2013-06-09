@@ -1,11 +1,3 @@
-<!--hier kannst du die Farbe des Captchas anpassen, wähle eine folgender Themes:
-'red','white','blackglass','clean','custom' | weitere Infos zum anpassen des Styles bzw. auch individueller Styles findest du auf www.recaptcha.net-->
-<script>
-var RecaptchaOptions = {
-   theme : 'white',
-   tabindex : 2
-};
-</script>
 <script language="JavaScript" type="text/javascript">
 <!--
 var comment_submit = false;
@@ -18,6 +10,11 @@ function chkFormular() {
 	if(document.getElementById('message').value == "") {
 		alert('%enter_message%');
 		document.getElementById('message').focus();
+   		return false;
+	}
+	if(document.getElementById('captcha').value == "") {
+		alert('%error_captcha%');
+		document.getElementById('captcha').focus();
    		return false;
 	}
  	if(!validbbcode(document.getElementById('message').value)){
@@ -60,8 +57,9 @@ function chkFormular() {
         <td colspan="2">%enter_code%:</td>
       </tr>
       <tr>
-        <td>&nbsp;</td>
-        <td>$recaptcha</td>
+        <td>$captcha</td>
+        <td><input name="captcha" id="captcha" type="text" value="" size="5" />
+        <input name="captcha_hash" type="hidden" value="$hash" /></td>
       </tr>
       <tr>
         <td>%ip%:</td>
