@@ -850,3 +850,10 @@ h2#under_nav {
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+.errorbox {
+    background-color: #f65151;
+    border:1px #ba0000 solid;
+    padding-bottom: 5px;
+    margin-bottom: 9px;
+}
