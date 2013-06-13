@@ -80,19 +80,23 @@ $index_language = $_language->module;
 		
 	</div>
 	<div id="page">
-		<div id="left_column">
-			<div id="navigation">
-				<div id="nav_arrows">
-					<div id="nav_arrow_up" class="nav_arrow" onclick="showSubnavi('prev')"></div>
-					<div id="nav_arrow_down" class="nav_arrow" onclick="showSubnavi('next')"></div>
+		<div>
+<?php include "navigation.php"; ?>
+				
 				</div>
-				<ul>
-					<li id="nav_item1"><a id="cat_id1" href="javascript:showSubnavi(1)">Info area</a></li>
-					<li id="nav_item2"><a id="cat_id2" href="javascript:showSubnavi(2)">Community area</a></li>
-					<li id="nav_item3"><a id="cat_id3" href="javascript:showSubnavi(3)">Clan area</a></li>
-					<li id="nav_item4"><a id="cat_id4" href="javascript:showSubnavi(4)">Media area</a></li>
-				</ul>
+		<div id="announcements">
+			<div id="highlighted">
+				<h2>Highlighted</h2>
+				<?php include "highlighted.php"; ?>
 			</div>
+			<div id="upcoming_match">
+				<h2>Upcoming Match</h2>
+				<?php include "upcoming_match.php"; ?>
+				<!--<div class="content"><img src="http://evil-twc.ucoz.com/banner/page_banner.png" width="330" height="170"/></div>-->
+			</div>
+		</div>
+		<div id="left_column">
+			
 			<?php
 			if ($_GET['site'] != 'forum' && $_GET['site'] != 'forum_topic')
 			{
@@ -119,20 +123,8 @@ $index_language = $_language->module;
 			}
 			?>
 		</div>
-		<div id="subnavi">
-			<?php include "navigation.php"; ?>
-		</div>
-		<div id="announcements">
-			<div id="highlighted">
-				<h2>Highlighted</h2>
-				<?php include "highlighted.php"; ?>
-			</div>
-			<div id="upcoming_match">
-				<h2>Upcoming Match</h2>
-				<?php include "upcoming_match.php"; ?>
-				<!--<div class="content"><img src="http://evil-twc.ucoz.com/banner/page_banner.png" width="330" height="170"/></div>-->
-			</div>
-		</div>
+		
+		
 		<div id="middle_column">
 			<div class="block">
 				<div class="article_container">
@@ -179,9 +171,9 @@ $index_language = $_language->module;
 				</div>
 			</div>
 			<div class="block">
-				<h2>Pic of the moment</h2>
+				<h2>Poll</h2>
 				<div class="content center">
-					<?php include "sc_potm.php"; ?>
+					<?php include "poll.php"; ?>
 				</div>
 			</div>
 			<div class="block">

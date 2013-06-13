@@ -50,7 +50,7 @@ input:focus, textarea:focus, select:focus, button:focus {
 	background-color: #eaf7fd;
 	color: #666;
 }
-ul, ol {
+ol {
 	padding-left: 2.5em;
 }
 p {
@@ -79,7 +79,7 @@ thead {
 	margin: 0 auto;
 }
 #header {
-	background-image: url("images/header.png");
+	
 	height: 130px;
 	position: relative;
 }
@@ -194,93 +194,15 @@ thead {
 	background-image: linear-gradient(bottom,#194eaa 0,#288ce8 100%);
 	border-left: 1px solid #05106b;
 	border-right: 1px solid #05106b;
-	box-shadow: 0 33px 15px 3px #56cfec;
+	
 }
 #left_column {
 	float: left;
 	margin-left: 5px;
 	width: 180px;
+	margin-top: 6px;
 }
-#navigation {
-	background-image: url("images/navigation.png");
-	background-repeat: no-repeat;
-	padding-top: 20px;
-	font-size: 0.8em;
-	font-weight: bold;
-	font-style: italic;
-	text-align: right;
-	height: 100px;
-	width: 210px;
-	text-transform:uppercase;
-	position: relative;
-	z-index: 1;
-}
-#nav_arrows {
-	float: left;
-	color: #fff;
-	margin-top: 20px;
-	margin-left: 10px;
-	width: 20px;
-}
-#nav_arrow_up {
-	background-position: 0 0;
-	margin-bottom: 5px;
-}
-#nav_arrow_up:hover {
-	background-position: 20px 0;
-}
-#nav_arrow_up:active {
-	background-position: 40px 0;
-}
-#nav_arrow_down {
-	background-position: 0 20px;
-}
-#nav_arrow_down:hover {
-	background-position: 20px 20px;
-}
-#nav_arrow_down:active {
-	background-position: 40px 20px;
-}
-.nav_arrow {
-	background-image: url("images/nav_arrows.png");
-	cursor: pointer;
-	height: 20px;
-	width: 20px;
-}
-#navigation ul {
-	float: right;
-	margin-right: 40px;
-	width: 140px;
-}
-#navigation ul li {
-	line-height: 20px;
-}
-#navigation ul li a {
-	background-image: url("images/navigation_links.png");
-	color: #fff;
-	display: block;
-	padding-right: 10px;
-	transition: 0s;
-	-o-transition: 0s;
-	-moz-transition: 0s;
-	-webkit-transition: 0s;
-}
-#navigation ul li a:hover {
-	background-position: 0 -20px;
-}
-#navigation ul li a:active,
-.active_cat {
-	background-position: 0 -40px!important;
-}
-#nav_item2 {
-	padding-right: 8px;
-}
-#nav_item3 {
-	padding-right: 13px;
-}
-#nav_item4 {
-	padding-right: 14px;
-}
+
 #left_column ul,
 #right_column ul {
 	list-style-type: none;
@@ -449,7 +371,7 @@ h2#under_nav {
 #announcements {
 	float: right;
 	margin-left: 5px;
-	width: 683px;
+	width: 898px;
 	position: relative;
 	z-index: 0;
 }
@@ -468,6 +390,7 @@ h2#under_nav {
 	position: relative;
 	height: 170px;
 	width: 330px;
+	padding-left: 63px;
 }
 #highlighted a {
 	color: #d0eafa;
@@ -486,7 +409,7 @@ h2#under_nav {
 }
 #highlighted h2,
 #upcoming_match h2 {
-	background-image: url("images/announcements.png");
+	background-image: url("images/title_bg2.gif");
 	color: #fff;
 	font-style: italic;
 	font-weight: bold;
@@ -494,7 +417,9 @@ h2#under_nav {
 	font-size: 1.1em;
 	height: 35px;
 	line-height: 30px;
-	padding-left: 2em;
+	padding-left: 9em;
+	margin-bottom: 5px;
+	
 }
 #highlighted h2 {
 	background-position: 0 0;
@@ -517,7 +442,6 @@ h2#under_nav {
 	position: absolute;
 	bottom: 0;
 	width: 320px;
-	border-bottom-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
@@ -545,8 +469,8 @@ h2#under_nav {
 	cursor: pointer;
 	padding: 0;
 	position: absolute;
-	top: 20px;
-	left: 140px;
+	top: 7px;
+	left: 74px;
 }
 .highlighted_slider_nav li {
 	background-color: #ccc;
@@ -574,12 +498,14 @@ h2#under_nav {
 	position: absolute;
 	top: 70px;
 	left: 305px;
+	margin-left: 64px;
 }
 #highlighted_slideleft {
 	background-position: 0 20px;
 	position: absolute;
 	top: 70px;
 	left: 5px;
+	margin-left: 63px;
 }
 #highlighted_slideright:hover {
 	background-position: 20px 0;
@@ -609,6 +535,7 @@ h2#under_nav {
 	text-align: center;
 	height: 100px;
 	width: 337px;
+	margin-left: 50px;
 }
 #upcoming_match .content {
 	/*background-image: -moz-linear-gradient(bottom,#000000 0,#1a1a1a 100%);
@@ -857,3 +784,75 @@ h2#under_nav {
     padding-bottom: 5px;
     margin-bottom: 9px;
 }
+
+#nav{
+    background: url('images/title_bg2.gif');
+    list-style:none;
+    margin-bottom:10px;
+    /* Clear floats */
+    float:left;
+    width: 888px;
+    position:relative;
+    z-index:5000;
+    line-height: 22.5px;
+    padding-left: 10px;
+    font-weight: bold;
+}
+#nav li{
+    float:left;
+    margin-right:10px;
+    position:relative;
+}
+#nav a{
+    display:block;
+    padding:5px;
+    color:#fff;
+    text-decoration:none;
+}
+#nav a:hover{
+    color:#fff;
+    background:#217edd;
+}
+
+/*--- DROPDOWN ---*/
+#nav ul{
+    background:#fff; /* Adding a background makes the dropdown work properly in IE7+. Make this as close to your page's background as possible (i.e. white page == white background). */
+    background:rgba(255,255,255,0); /* But! Let's make the background fully transparent where we can, we don't actually want to see it if we can help it... */
+    list-style:none;
+    position:absolute;
+    left:-9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
+}
+#nav ul li{
+    float:none;
+}
+#nav ul a{
+    white-space:nowrap; /* Stop text wrapping and creating multi-line dropdown items */
+
+    background-color:#070101;
+opacity:0.9;
+
+}
+#nav li:hover ul{ /* Display the dropdown on hover */
+    left:0; /* Bring back on-screen when needed */
+    }
+#nav li:hover a{ /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+    background:#2580db;
+    
+}
+#nav li:hover ul a{ /* The persistent hover state does however create a global style for links even before they're hovered. Here we undo these effects. */
+    text-decoration:none;
+}
+#nav li:hover ul li a:hover{ /* Here we define the most explicit hover states--what happens when you hover each individual link. */
+    background:#333;
+}
+#notiss{
+background-image: url('images/notify.png');
+height: 24px;
+width: 24px;
+position: relative;
+color: white;
+text-align: center;
+display: block;
+margin-top: -34px;
+margin-left: 118px;
+line-height: 1.7em;}
